@@ -1,45 +1,40 @@
 package guru.springframework.orderservice.domain;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import java.util.Objects;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * OrderHeader
+ * BaseEntity
  * <p>
  * Created by IntelliJ, Spring Framework Guru.
  *
  * @author architecture - raul.perez.vicente@gmail.com
- * @version 25/09/2026 - 15:35
+ * @version 25/09/2026 - 16:09
  * @since 1.25
  */
-@Entity
+@MappedSuperclass
 @Getter
 @Setter
-@NoArgsConstructor
-public class OrderHeader extends BaseEntity {
+public abstract class BaseEntity {
 
-    private String customer;
-
-    public OrderHeader(String customer) {
-        this.customer = customer;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        OrderHeader that = (OrderHeader) o;
-        return Objects.equals(customer, that.customer);
+        BaseEntity that = (BaseEntity) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), customer);
+        return Objects.hashCode(id);
     }
 }
