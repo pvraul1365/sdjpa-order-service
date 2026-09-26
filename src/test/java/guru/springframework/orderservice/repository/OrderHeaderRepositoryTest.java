@@ -38,7 +38,6 @@ class OrderHeaderRepositoryTest {
     @Test
     void testSaveOrderWithLine() {
         var orderHeader = new OrderHeader("New Customer");
-        var savedOrder = orderHeaderRepository.save(orderHeader);
 
         var orderLine = new OrderLine();
         orderLine.setQuantityOrdered(5);
@@ -46,10 +45,16 @@ class OrderHeaderRepositoryTest {
         orderHeader.setOrderLines(Set.of(orderLine));
         orderLine.setOrderHeader(orderHeader);
 
+        var savedOrder = orderHeaderRepository.save(orderHeader);
+
         assertNotNull(savedOrder);
         assertNotNull(savedOrder.getId());
         assertNotNull(savedOrder.getOrderLines());
         assertEquals(savedOrder.getOrderLines().size(), 1);
+
+        var fetchedOrder = orderHeaderRepository.getById(savedOrder.getId());
+        assertNotNull(fetchedOrder);
+        assertEquals(fetchedOrder.getOrderLines().size(), 1);
 
     }
 }

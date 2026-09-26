@@ -36,6 +36,6 @@ public class OrderLine extends BaseEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), quantityOrdered, orderHeader);
+        return Objects.hash(super.hashCode(), quantityOrdered);
     }
 }
