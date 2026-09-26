@@ -3,7 +3,10 @@ package guru.springframework.orderservice.domain;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -63,8 +66,14 @@ public class OrderHeader extends BaseEntity {
 
     private String customer;
 
+    @Embedded
     private Address shippingAddress;
+
+    @Embedded
     private Address billToAddress;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     public OrderHeader(String customer) {
         this.customer = customer;
@@ -75,11 +84,11 @@ public class OrderHeader extends BaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         OrderHeader that = (OrderHeader) o;
-        return Objects.equals(customer, that.customer) && Objects.equals(shippingAddress, that.shippingAddress) && Objects.equals(billToAddress, that.billToAddress);
+        return Objects.equals(customer, that.customer) && Objects.equals(shippingAddress, that.shippingAddress) && Objects.equals(billToAddress, that.billToAddress) && orderStatus == that.orderStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), customer, shippingAddress, billToAddress);
+        return Objects.hash(super.hashCode(), customer, shippingAddress, billToAddress, orderStatus);
     }
 }
