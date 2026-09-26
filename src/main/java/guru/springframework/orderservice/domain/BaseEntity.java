@@ -10,6 +10,7 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * BaseEntity
@@ -33,15 +34,18 @@ public abstract class BaseEntity {
     @Column(updatable = false)
     private Timestamp createdDate;
 
+    @UpdateTimestamp
+    private Timestamp lastModifiedDate;
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         BaseEntity that = (BaseEntity) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) && Objects.equals(createdDate, that.createdDate) && Objects.equals(lastModifiedDate, that.lastModifiedDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(id, createdDate, lastModifiedDate);
     }
 }
