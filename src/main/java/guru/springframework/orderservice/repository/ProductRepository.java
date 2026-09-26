@@ -13,4 +13,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @since 1.25
  */
 public interface ProductRepository extends JpaRepository<Product, Long> {
+
+    Product findByDescription(String description);
+
 }

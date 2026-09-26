@@ -36,6 +36,13 @@ class OrderHeaderRepositoryTest {
     }
 
     @Test
+    void testGetCategory() {
+        var product = productRepository.findByDescription("PRODUCT1");
+        assertNotNull(product);
+        assertNotNull(product.getCategories());
+    }
+
+    @Test
     void testSaveOrder() {
         var orderHeader = new OrderHeader("New Customer");
         var savedOrder = orderHeaderRepository.save(orderHeader);
