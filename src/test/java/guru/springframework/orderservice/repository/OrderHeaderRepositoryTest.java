@@ -2,7 +2,10 @@ package guru.springframework.orderservice.repository;
 
 import guru.springframework.orderservice.domain.OrderHeader;
 import guru.springframework.orderservice.domain.OrderLine;
+import guru.springframework.orderservice.domain.Product;
+import guru.springframework.orderservice.domain.ProductStatus;
 import java.util.Set;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -19,6 +22,19 @@ class OrderHeaderRepositoryTest {
     @Autowired
     OrderHeaderRepository orderHeaderRepository;
 
+    @Autowired
+    ProductRepository productRepository;
+
+    Product product;
+
+    @BeforeEach
+    void setup() {
+        Product newProduct = new Product();
+        newProduct.setDescription("Test Product");
+        newProduct.setProductStatus(ProductStatus.NEW);
+        product = productRepository.saveAndFlush(newProduct);
+    }
+
     @Test
     void testSaveOrder() {
         var orderHeader = new OrderHeader("New Customer");
@@ -27,7 +43,7 @@ class OrderHeaderRepositoryTest {
         assertNotNull(savedOrder);
         assertNotNull(savedOrder.getId());
 
-        var fetchedOrder = orderHeaderRepository.getById(savedOrder.getId());
+        var fetchedOrder = orderHeaderRepository.getReferenceById(savedOrder.getId());
 
         assertNotNull(fetchedOrder);
         assertNotNull(fetchedOrder.getId());
@@ -41,6 +57,7 @@ class OrderHeaderRepositoryTest {
 
         var orderLine = new OrderLine();
         orderLine.setQuantityOrdered(5);
+        orderLine.setProduct(product);
 
         orderHeader.setOrderLines(Set.of(orderLine));
         orderLine.setOrderHeader(orderHeader);
@@ -50,11 +67,11 @@ class OrderHeaderRepositoryTest {
         assertNotNull(savedOrder);
         assertNotNull(savedOrder.getId());
         assertNotNull(savedOrder.getOrderLines());
-        assertEquals(savedOrder.getOrderLines().size(), 1);
+        assertEquals(1, savedOrder.getOrderLines().size());
 
-        var fetchedOrder = orderHeaderRepository.getById(savedOrder.getId());
+        var fetchedOrder = orderHeaderRepository.getReferenceById(savedOrder.getId());
         assertNotNull(fetchedOrder);
-        assertEquals(fetchedOrder.getOrderLines().size(), 1);
+        assertEquals(1, fetchedOrder.getOrderLines().size());
 
     }
 }
