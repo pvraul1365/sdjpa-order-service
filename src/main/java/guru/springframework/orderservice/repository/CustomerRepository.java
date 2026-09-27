@@ -1,20 +1,18 @@
 package guru.springframework.orderservice.repository;
 
-import guru.springframework.orderservice.domain.Product;
+import guru.springframework.orderservice.domain.Customer;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * ProductRepository
+ * CustomerRepository
  * <p>
  * Created by IntelliJ, Spring Framework Guru.
  *
  * @author architecture - raul.perez.vicente@gmail.com
- * @version 26/09/2026 - 12:32
+ * @version 27/09/2026 - 17:41
  * @since 1.25
  */
-public interface ProductRepository extends JpaRepository<Product, Long> {
-
-    Optional<Product> findByDescription(String description);
-
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
+    Optional<Customer> findCustomerByCustomerNameIgnoreCase(String name);
 }

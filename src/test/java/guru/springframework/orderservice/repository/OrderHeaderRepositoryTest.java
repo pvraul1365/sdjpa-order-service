@@ -42,7 +42,7 @@ class OrderHeaderRepositoryTest {
 
     @Test
     void testGetCategory() {
-        var product = productRepository.findByDescription("PRODUCT1");
+        var product = productRepository.findByDescription("PRODUCT1").get();
         assertNotNull(product);
         assertNotNull(product.getCategories());
     }
