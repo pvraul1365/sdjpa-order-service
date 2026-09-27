@@ -12,6 +12,7 @@ import guru.springframework.orderservice.repository.ProductRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("local")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Slf4j
 public class DataLoadTest {
 
     final String PRODUCT_D1 = "Product 1";
@@ -48,6 +50,14 @@ public class DataLoadTest {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Test
+    void testLazyVsEager() {
+        var orderHeader = orderHeaderRepository.findById(45L).orElseThrow();
+
+        log.info("order header id: {}", orderHeader.getId());
+        log.info("customer name: {}", orderHeader.getCustomer().getCustomerName());
+    }
 
     @Disabled
     @Rollback(value = false)
