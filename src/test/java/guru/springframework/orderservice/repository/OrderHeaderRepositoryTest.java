@@ -1,6 +1,7 @@
 package guru.springframework.orderservice.repository;
 
 import guru.springframework.orderservice.domain.Customer;
+import guru.springframework.orderservice.domain.OrderApproval;
 import guru.springframework.orderservice.domain.OrderHeader;
 import guru.springframework.orderservice.domain.OrderLine;
 import guru.springframework.orderservice.domain.Product;
@@ -25,6 +26,9 @@ class OrderHeaderRepositoryTest {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    OrderApprovalRepository orderApprovalRepository;
 
     Product product;
 
@@ -74,6 +78,11 @@ class OrderHeaderRepositoryTest {
         orderLine.setProduct(product);
 
         orderHeader.addOrderLine(orderLine);
+
+        var orderApproval = new OrderApproval();
+        orderApproval.setApprovedBy("Test Approver");
+        var savedApproval = orderApprovalRepository.save(orderApproval);
+        orderHeader.setOrderApproval(savedApproval);
 
         var savedOrder = orderHeaderRepository.save(orderHeader);
 
