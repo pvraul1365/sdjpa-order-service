@@ -10,6 +10,7 @@ import guru.springframework.orderservice.repository.CustomerRepository;
 import guru.springframework.orderservice.repository.OrderHeaderRepository;
 import guru.springframework.orderservice.repository.ProductRepository;
 import java.util.ArrayList;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,18 @@ public class DataLoadTest {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Test
+    void testN_PlusOneProblem() {
+        var customer = customerRepository.findCustomerByCustomerNameIgnoreCase(TEST_CUSTOMER).get();
+
+        IntSummaryStatistics totalOrdered = orderHeaderRepository.findAllByCustomer(customer).stream()
+                .flatMap(orderHeader -> orderHeader.getOrderLines().stream())
+                .mapToInt(OrderLine::getQuantityOrdered)
+                .summaryStatistics();
+
+        log.info("Total ordered products: " + totalOrdered);
+    }
 
     @Test
     void testLazyVsEager() {

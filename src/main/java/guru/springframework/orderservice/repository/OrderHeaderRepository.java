@@ -1,6 +1,8 @@
 package guru.springframework.orderservice.repository;
 
+import guru.springframework.orderservice.domain.Customer;
 import guru.springframework.orderservice.domain.OrderHeader;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -13,4 +15,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @since 1.25
  */
 public interface OrderHeaderRepository extends JpaRepository<OrderHeader, Long> {
+
+    List<OrderHeader> findAllByCustomer(Customer customer);
+
 }
