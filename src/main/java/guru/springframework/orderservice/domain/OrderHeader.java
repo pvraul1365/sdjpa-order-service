@@ -8,6 +8,8 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Objects;
@@ -65,7 +67,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class OrderHeader extends BaseEntity {
 
-    private String customer;
+    @ManyToOne
+    private Customer customer;
 
     @Embedded
     private Address shippingAddress;
@@ -78,10 +81,6 @@ public class OrderHeader extends BaseEntity {
 
     @OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)
     private Set<OrderLine> orderLines;
-
-    public OrderHeader(String customer) {
-        this.customer = customer;
-    }
 
     public void addOrderLine(OrderLine orderLine) {
         if (orderLines == null) {

@@ -1,5 +1,6 @@
 package guru.springframework.orderservice.repository;
 
+import guru.springframework.orderservice.domain.Customer;
 import guru.springframework.orderservice.domain.OrderHeader;
 import guru.springframework.orderservice.domain.OrderLine;
 import guru.springframework.orderservice.domain.Product;
@@ -44,7 +45,10 @@ class OrderHeaderRepositoryTest {
 
     @Test
     void testSaveOrder() {
-        var orderHeader = new OrderHeader("New Customer");
+        var customer = new Customer();
+        customer.setCustomerName("Test Customer");
+        var orderHeader = new OrderHeader();
+        orderHeader.setCustomer(customer);
         var savedOrder = orderHeaderRepository.save(orderHeader);
 
         assertNotNull(savedOrder);
@@ -60,7 +64,10 @@ class OrderHeaderRepositoryTest {
 
     @Test
     void testSaveOrderWithLine() {
-        var orderHeader = new OrderHeader("New Customer");
+        var customer = new Customer();
+        customer.setCustomerName("Test Customer");
+        var orderHeader = new OrderHeader();
+        orderHeader.setCustomer(customer);
 
         var orderLine = new OrderLine();
         orderLine.setQuantityOrdered(5);
