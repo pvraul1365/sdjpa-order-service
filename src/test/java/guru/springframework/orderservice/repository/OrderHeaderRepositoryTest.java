@@ -6,7 +6,9 @@ import guru.springframework.orderservice.domain.OrderHeader;
 import guru.springframework.orderservice.domain.OrderLine;
 import guru.springframework.orderservice.domain.Product;
 import guru.springframework.orderservice.domain.ProductStatus;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("local")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Slf4j
 class OrderHeaderRepositoryTest {
 
     @Autowired
@@ -42,6 +45,33 @@ class OrderHeaderRepositoryTest {
         var product = productRepository.findByDescription("PRODUCT1");
         assertNotNull(product);
         assertNotNull(product.getCategories());
+    }
+
+    @Test
+    void testDeleteCascade() {
+
+        var orderHeader = new OrderHeader();
+        var customer = new Customer();
+        customer.setCustomerName("Test Customer");
+        orderHeader.setCustomer(customer);
+
+        var orderLine = new OrderLine();
+        orderLine.setQuantityOrdered(3);
+        orderLine.setProduct(product);
+
+        orderHeader.addOrderLine(orderLine);
+        var savedOrderHeader = orderHeaderRepository.save(orderHeader);
+
+        log.info("order header saved and flush with id: {}", savedOrderHeader.getId());
+
+        orderHeaderRepository.delete(savedOrderHeader);
+        orderHeaderRepository.flush();
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            var fetcherOrder = orderHeaderRepository.getReferenceById(savedOrderHeader.getId());
+
+            fetcherOrder.getOrderStatus();
+        });
     }
 
     @Test
