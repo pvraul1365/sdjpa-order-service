@@ -59,6 +59,10 @@ class OrderHeaderRepositoryTest {
         orderLine.setQuantityOrdered(3);
         orderLine.setProduct(product);
 
+        var orderApproval = new OrderApproval();
+        orderApproval.setApprovedBy("Test Approver");
+        orderHeader.setOrderApproval(orderApproval);
+
         orderHeader.addOrderLine(orderLine);
         var savedOrderHeader = orderHeaderRepository.save(orderHeader);
 
