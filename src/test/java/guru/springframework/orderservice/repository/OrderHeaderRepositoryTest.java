@@ -27,9 +27,6 @@ class OrderHeaderRepositoryTest {
     @Autowired
     ProductRepository productRepository;
 
-    @Autowired
-    OrderApprovalRepository orderApprovalRepository;
-
     Product product;
 
     @BeforeEach
@@ -81,8 +78,7 @@ class OrderHeaderRepositoryTest {
 
         var orderApproval = new OrderApproval();
         orderApproval.setApprovedBy("Test Approver");
-        var savedApproval = orderApprovalRepository.save(orderApproval);
-        orderHeader.setOrderApproval(savedApproval);
+        orderHeader.setOrderApproval(orderApproval);
 
         var savedOrder = orderHeaderRepository.save(orderHeader);
 
